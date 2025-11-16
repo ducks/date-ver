@@ -40,7 +40,7 @@ semantic versioning. Instead of `1.2.3` or `2.0.0`, versions are `20251115`,
 
 ## Read the Spec
 
-See [DATEVER.md](DATEVER.md) for the complete specification.
+See [DATE-VER.md](DATE-VER.md) for the complete specification.
 
 ## Projects Using DateVer
 
