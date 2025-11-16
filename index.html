@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Versioning - DateVer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #fff;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.8rem;
+      color: #34495e;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: "Monaco", "Courier New", monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    ol {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    ol li {
+      margin-bottom: 0.8rem;
+    }
+
+    ul {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    strong {
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .summary {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-left: 4px solid #3498db;
+    }
+
+    .spec-version {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Date Versioning</h1>
+    <p class="spec-version">DateVer 1.0.0</p>
+  </header>
+
+  <main>
+    <section class="summary">
+      <p>Given a version number YEAR, YEAR-MONTH, or YEAR-MONTH-DAY, represent the date when the version was released. DateVer uses calendar dates instead of semantic meaning to identify software releases.</p>
+    </section>
+
+    <section>
+      <h2>Introduction</h2>
+      <p>In the world of software management, version numbers communicate release ordering and compatibility. Semantic Versioning (SemVer) uses MAJOR.MINOR.PATCH to signal breaking changes and feature additions. Date Versioning (DateVer) takes a different approach: version numbers represent when the release happened, not what changed.</p>
+
+      <p>DateVer is ideal for:</p>
+      <ul>
+        <li>Projects with time-based release schedules (Ubuntu 24.04, 24.10)</li>
+        <li>Applications where "what changed" matters less than "when it was released"</li>
+        <li>Systems where users care about freshness over compatibility</li>
+        <li>Projects that want automatic, meaningful version numbers</li>
+      </ul>
+
+      <p>A DateVer version number takes the form YYYYMMDD, YYYYMM, or YYYY, allowing projects to choose their preferred granularity.</p>
+    </section>
+
+    <section>
+      <h2>DateVer Specification</h2>
+      <p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.</p>
+
+      <ol>
+        <li>A DateVer version MUST take the form YYYY, YYYYMM, or YYYYMMDD where YYYY is a four-digit year, MM is a two-digit month (01-12), and DD is a two-digit day (01-31). Each component MUST be zero-padded to its full width.</li>
+
+        <li>A version using year-only format (YYYY) represents any release in that year. A version using year-month format (YYYYMM) represents any release in that month. A version using year-month-day format (YYYYMMDD) represents a release on that specific day.</li>
+
+        <li>Versions MUST represent valid dates. Invalid dates like 20251301 (month 13) or 20250231 (February 31) are forbidden.</li>
+
+        <li>When a project needs multiple releases within the same time period, a sequence number MAY be appended after a dot. For example: 20251115.1, 20251115.2, 202511.1, 202511.2. The sequence number MUST be a positive integer and MUST NOT contain leading zeros.</li>
+
+        <li>A pre-release version MAY be denoted by appending a hyphen and a series of dot-separated identifiers immediately following the date or sequence number. Examples: 20251115-alpha, 20251115-beta.1, 20251115.2-rc.3. Identifiers MUST comprise only ASCII alphanumerics and hyphens [0-9A-Za-z-]. Pre-release versions have lower precedence than the associated normal version.</li>
+
+        <li>Build metadata MAY be denoted by appending a plus sign and a series of dot-separated identifiers immediately following the date, sequence number, or pre-release version. Examples: 20251115+build.123, 20251115.2+exp.sha.5114f85. Build metadata SHOULD be ignored when determining version precedence.</li>
+
+        <li>Precedence is determined by comparing each component from left to right. More specific versions (with more components) have higher precedence than less specific versions within the same time period. Examples:
+          <ul>
+            <li>2024 &lt; 2025</li>
+            <li>202510 &lt; 202511</li>
+            <li>20251114 &lt; 20251115</li>
+            <li>2025 &lt; 202501 &lt; 20250101</li>
+            <li>20251115 &lt; 20251115.1 &lt; 20251115.2</li>
+            <li>20251115-alpha &lt; 20251115-beta &lt; 20251115</li>
+          </ul>
+        </li>
+
+        <li>A project MAY change granularity between releases. A project using YYYY format may switch to YYYYMM or YYYYMMDD at any time. This is valid: 2024 → 202505 → 20250601.</li>
+
+        <li>Separators like dots, hyphens, or slashes MUST NOT be used within the date portion. These are invalid: 2025.11.15, 2025-11-15, 2025/11/15. The date MUST be continuous digits.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Why Use DateVer?</h2>
+
+      <p><strong>Automatic versioning:</strong> The version number is the release date. No decisions needed.</p>
+
+      <p><strong>Time-based releases:</strong> Projects that ship on schedules (monthly, quarterly, yearly) get meaningful version numbers automatically.</p>
+
+      <p><strong>No breaking change anxiety:</strong> Version numbers don't signal compatibility, reducing pressure to avoid major version bumps.</p>
+
+      <p><strong>Clear freshness:</strong> Users instantly know how old a release is.</p>
+    </section>
+
+    <section>
+      <h2>FAQ</h2>
+
+      <h3>How do I handle timezone differences?</h3>
+      <p>Use UTC for determining the date. Document this in your project.</p>
+
+      <h3>What if I release twice on the same day?</h3>
+      <p>Use sequence numbers: 20251115.1, 20251115.2.</p>
+
+      <h3>Can I mix granularities?</h3>
+      <p>Yes! A project can use 2024, then 202505, then 20250601. More specific versions are always considered newer within the same period.</p>
+
+      <h3>What about pre-releases?</h3>
+      <p>Use the same format as SemVer: 20251115-alpha.1, 20251115-rc.2.</p>
+
+      <h3>Should I use DateVer or SemVer?</h3>
+      <p>Use SemVer if you need to communicate compatibility (libraries, APIs).<br>
+      Use DateVer if you care about release timing (applications, utilities, distributions).</p>
+
+      <h3>Does DateVer work with existing tools?</h3>
+      <p>Most version comparison tools sort DateVer correctly since it uses lexicographic ordering. Pre-releases and build metadata follow SemVer conventions.</p>
+    </section>
+
+    <section>
+      <h2>About</h2>
+      <p>DateVer specification authored by <a href="https://jakegoldsborough.com">Jake Goldsborough</a>.</p>
+      <p>Inspired by Semantic Versioning and Calendar Versioning.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>License: <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons - CC BY 4.0</a></p>
+  </footer>
+</body>
+</html>
