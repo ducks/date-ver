@@ -1,0 +1,13 @@
+name: 'Validate Date-Ver'
+description: 'Validates that version numbers follow the Date-Ver specification'
+author: 'Jake Goldsborough'
+branding:
+  icon: 'calendar'
+  color: 'purple'
+inputs:
+  version:
+    description: 'Version string to validate (e.g., 20251116, 2025.11.16, 2025-11-16)'
+    required: true
+runs:
+  using: 'node20'
+  main: 'index.js'
