@@ -14,8 +14,8 @@
       --border-color: #d5c4a1;
       --code-bg: #ebdbb2;
       --summary-bg: #f2e5bc;
-      --summary-border: #458588;
-      --link-color: #076678;
+      --summary-border: #8f3f71;
+      --link-color: #8f3f71;
       --muted-color: #7c6f64;
     }
 
@@ -28,8 +28,8 @@
       --border-color: #504945;
       --code-bg: #3c3836;
       --summary-bg: #32302f;
-      --summary-border: #83a598;
-      --link-color: #83a598;
+      --summary-border: #d3869b;
+      --link-color: #d3869b;
       --muted-color: #928374;
     }
 
@@ -43,8 +43,8 @@
         --border-color: #504945;
         --code-bg: #3c3836;
         --summary-bg: #32302f;
-        --summary-border: #83a598;
-        --link-color: #83a598;
+        --summary-border: #d3869b;
+        --link-color: #d3869b;
         --muted-color: #928374;
       }
     }
@@ -191,19 +191,19 @@
 
   <header>
     <h1>Date Versioning</h1>
-    <p class="spec-version">DateVer 20251115</p>
+    <p class="spec-version">Date-Ver 20251116</p>
   </header>
 
   <main>
     <section class="summary">
-      <p>Given a version number YEAR, YEAR-MONTH, or YEAR-MONTH-DAY, represent the date when the version was released. DateVer uses calendar dates instead of semantic meaning to identify software releases.</p>
+      <p>Given a version number YEAR, YEAR-MONTH, or YEAR-MONTH-DAY, represent the date when the version was released. Date-Ver uses calendar dates instead of semantic meaning to identify software releases.</p>
     </section>
 
     <section>
       <h2>Introduction</h2>
-      <p>In the world of software management, version numbers communicate release ordering and compatibility. Semantic Versioning (SemVer) uses MAJOR.MINOR.PATCH to signal breaking changes and feature additions. Date Versioning (DateVer) takes a different approach: version numbers represent when the release happened, not what changed.</p>
+      <p>In the world of software management, version numbers communicate release ordering and compatibility. Semantic Versioning (SemVer) uses MAJOR.MINOR.PATCH to signal breaking changes and feature additions. Date Versioning (Date-Ver) takes a different approach: version numbers represent when the release happened, not what changed.</p>
 
-      <p>DateVer is ideal for:</p>
+      <p>Date-Ver is ideal for:</p>
       <ul>
         <li>Projects with time-based release schedules (Ubuntu 24.04, 24.10)</li>
         <li>Applications where "what changed" matters less than "when it was released"</li>
@@ -211,15 +211,15 @@
         <li>Projects that want automatic, meaningful version numbers</li>
       </ul>
 
-      <p>A DateVer version number takes the form YYYYMMDD, YYYYMM, or YYYY, allowing projects to choose their preferred granularity.</p>
+      <p>A Date-Ver version number takes the form YYYYMMDD, YYYYMM, or YYYY, allowing projects to choose their preferred granularity.</p>
     </section>
 
     <section>
-      <h2>DateVer Specification</h2>
+      <h2>Date-Ver Specification</h2>
       <p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.</p>
 
       <ol>
-        <li>A DateVer version MUST take the form YYYY, YYYYMM, or YYYYMMDD where YYYY is a four-digit year, MM is a two-digit month (01-12), and DD is a two-digit day (01-31). Each component MUST be zero-padded to its full width.</li>
+        <li>A Date-Ver version MUST take the form YYYY, YYYYMM, or YYYYMMDD where YYYY is a four-digit year, MM is a two-digit month (01-12), and DD is a two-digit day (01-31). Each component MUST be zero-padded to its full width.</li>
 
         <li>Components MAY be separated by a single character separator. If a separator is used, the same separator MUST be used consistently throughout the version. Valid examples: 20251115, 2025.11.15, 2025-11-15, 2025/11/15. Invalid: 2025.11-15 (mixed separators). Versions with different separators are considered equivalent: 20251115 = 2025.11.15 = 2025-11-15.</li>
 
@@ -227,11 +227,7 @@
 
         <li>Versions MUST represent valid dates. Invalid dates like 20251301 (month 13) or 20250231 (February 31) are forbidden.</li>
 
-        <li>When a project needs multiple releases within the same time period, a sequence number MAY be appended after a dot. For example: 20251115.1, 20251115.2, 202511.1, 202511.2. The sequence number MUST be a positive integer and MUST NOT contain leading zeros.</li>
-
-        <li>A pre-release version MAY be denoted by appending a hyphen and a series of dot-separated identifiers immediately following the date or sequence number. Examples: 20251115-alpha, 20251115-beta.1, 20251115.2-rc.3. Identifiers MUST comprise only ASCII alphanumerics and hyphens [0-9A-Za-z-]. Pre-release versions have lower precedence than the associated normal version.</li>
-
-        <li>Build metadata MAY be denoted by appending a plus sign and a series of dot-separated identifiers immediately following the date, sequence number, or pre-release version. Examples: 20251115+build.123, 20251115.2+exp.sha.5114f85. Build metadata SHOULD be ignored when determining version precedence.</li>
+        <li>Additional identifiers MAY be appended to the date using the chosen separator. This includes sequence numbers, pre-release identifiers, or build metadata. If no separator was used in the date portion, any separator MAY be chosen for additional identifiers, and that separator MUST be used consistently. Examples: 20251115.1, 20251115.alpha.1, 2025-11-15-rc-2, 2025/11/15/beta/1. Each identifier MUST comprise only ASCII alphanumerics [0-9A-Za-z] and MUST NOT be empty. Numeric identifiers MUST NOT contain leading zeros. Pre-release identifiers have lower precedence than versions without them.</li>
 
         <li>Precedence is determined by comparing each component from left to right. More specific versions (with more components) have higher precedence than less specific versions within the same time period. When comparing versions with separators, strip separators first. Examples:
           <ul>
@@ -240,7 +236,7 @@
             <li>20251114 &lt; 20251115</li>
             <li>2025 &lt; 202501 &lt; 20250101</li>
             <li>20251115 &lt; 20251115.1 &lt; 20251115.2</li>
-            <li>20251115-alpha &lt; 20251115-beta &lt; 20251115</li>
+            <li>20251115.alpha &lt; 20251115.beta &lt; 20251115</li>
             <li>2025.11.15 = 2025-11-15 = 20251115 (equivalent after stripping separators)</li>
           </ul>
         </li>
@@ -250,7 +246,7 @@
     </section>
 
     <section>
-      <h2>Why Use DateVer?</h2>
+      <h2>Why Use Date-Ver?</h2>
 
       <p><strong>Automatic versioning:</strong> The version number is the release date. No decisions needed.</p>
 
@@ -274,19 +270,19 @@
       <p>Yes! A project can use 2024, then 202505, then 20250601. More specific versions are always considered newer within the same period.</p>
 
       <h3>What about pre-releases?</h3>
-      <p>Use the same format as SemVer: 20251115-alpha.1, 20251115-rc.2.</p>
+      <p>Append identifiers using your chosen separator: 20251115.alpha.1, 2025-11-15-rc-2.</p>
 
-      <h3>Should I use DateVer or SemVer?</h3>
+      <h3>Should I use Date-Ver or SemVer?</h3>
       <p>Use SemVer if you need to communicate compatibility (libraries, APIs).<br>
-      Use DateVer if you care about release timing (applications, utilities, distributions).</p>
+      Use Date-Ver if you care about release timing (applications, utilities, distributions).</p>
 
-      <h3>Does DateVer work with existing tools?</h3>
-      <p>Most version comparison tools sort DateVer correctly since it uses lexicographic ordering. Pre-releases and build metadata follow SemVer conventions.</p>
+      <h3>Does Date-Ver work with existing tools?</h3>
+      <p>Most version comparison tools sort Date-Ver correctly since it uses lexicographic ordering.</p>
     </section>
 
     <section>
       <h2>About</h2>
-      <p>DateVer specification authored by <a href="https://jakegoldsborough.com">Jake Goldsborough</a>.</p>
+      <p>Date-Ver specification authored by <a href="https://jakegoldsborough.com">Jake Goldsborough</a>.</p>
       <p>Inspired by Semantic Versioning and Calendar Versioning.</p>
     </section>
   </main>
