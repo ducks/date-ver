@@ -157,6 +157,8 @@
       <ol>
         <li>A DateVer version MUST take the form YYYY, YYYYMM, or YYYYMMDD where YYYY is a four-digit year, MM is a two-digit month (01-12), and DD is a two-digit day (01-31). Each component MUST be zero-padded to its full width.</li>
 
+        <li>Components MAY be separated by a single character separator. If a separator is used, the same separator MUST be used consistently throughout the version. Valid examples: 20251115, 2025.11.15, 2025-11-15, 2025/11/15. Invalid: 2025.11-15 (mixed separators). Versions with different separators are considered equivalent: 20251115 = 2025.11.15 = 2025-11-15.</li>
+
         <li>A version using year-only format (YYYY) represents any release in that year. A version using year-month format (YYYYMM) represents any release in that month. A version using year-month-day format (YYYYMMDD) represents a release on that specific day.</li>
 
         <li>Versions MUST represent valid dates. Invalid dates like 20251301 (month 13) or 20250231 (February 31) are forbidden.</li>
@@ -167,7 +169,7 @@
 
         <li>Build metadata MAY be denoted by appending a plus sign and a series of dot-separated identifiers immediately following the date, sequence number, or pre-release version. Examples: 20251115+build.123, 20251115.2+exp.sha.5114f85. Build metadata SHOULD be ignored when determining version precedence.</li>
 
-        <li>Precedence is determined by comparing each component from left to right. More specific versions (with more components) have higher precedence than less specific versions within the same time period. Examples:
+        <li>Precedence is determined by comparing each component from left to right. More specific versions (with more components) have higher precedence than less specific versions within the same time period. When comparing versions with separators, strip separators first. Examples:
           <ul>
             <li>2024 &lt; 2025</li>
             <li>202510 &lt; 202511</li>
@@ -175,12 +177,11 @@
             <li>2025 &lt; 202501 &lt; 20250101</li>
             <li>20251115 &lt; 20251115.1 &lt; 20251115.2</li>
             <li>20251115-alpha &lt; 20251115-beta &lt; 20251115</li>
+            <li>2025.11.15 = 2025-11-15 = 20251115 (equivalent after stripping separators)</li>
           </ul>
         </li>
 
         <li>A project MAY change granularity between releases. A project using YYYY format may switch to YYYYMM or YYYYMMDD at any time. This is valid: 2024 → 202505 → 20250601.</li>
-
-        <li>Separators like dots, hyphens, or slashes MUST NOT be used within the date portion. These are invalid: 2025.11.15, 2025-11-15, 2025/11/15. The date MUST be continuous digits.</li>
       </ol>
     </section>
 

@@ -16,11 +16,11 @@ pkgs.mkShell {
     echo "=============================================="
     echo ""
     echo "Files:"
-    echo "  DATEVER.md - The specification"
-    echo "  README.md  - Introduction and examples"
+    echo "  DATE-VER.md - The specification"
+    echo "  README.md   - Introduction and examples"
     echo ""
     echo "Commands:"
-    echo "  markdownlint-cli DATEVER.md README.md - Lint markdown files"
+    echo "  markdownlint-cli DATE-VER.md README.md - Lint markdown files"
     echo ""
   '';
 }
