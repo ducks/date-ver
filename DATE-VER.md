@@ -1,26 +1,26 @@
-# Date Versioning Specification (DateVer)
+# Date Versioning Specification (Date-Ver)
 
 ## Summary
 
-Given a version number YEAR, YEAR-MONTH, or YEAR-MONTH-DAY, represent the date when the version was released. DateVer uses calendar dates instead of semantic meaning to identify software releases.
+Given a version number YEAR, YEAR-MONTH, or YEAR-MONTH-DAY, represent the date when the version was released. Date-Ver uses calendar dates instead of semantic meaning to identify software releases.
 
 ## Introduction
 
-In the world of software management, version numbers communicate release ordering and compatibility. Semantic Versioning (SemVer) uses MAJOR.MINOR.PATCH to signal breaking changes and feature additions. Date Versioning (DateVer) takes a different approach: version numbers represent when the release happened, not what changed.
+In the world of software management, version numbers communicate release ordering and compatibility. Semantic Versioning (SemVer) uses MAJOR.MINOR.PATCH to signal breaking changes and feature additions. Date Versioning (Date-Ver) takes a different approach: version numbers represent when the release happened, not what changed.
 
-DateVer is ideal for:
+Date-Ver is ideal for:
 - Projects with time-based release schedules (Ubuntu 24.04, 24.10)
 - Applications where "what changed" matters less than "when it was released"
 - Systems where users care about freshness over compatibility
 - Projects that want automatic, meaningful version numbers
 
-A DateVer version number takes the form YYYYMMDD, YYYYMM, or YYYY, allowing projects to choose their preferred granularity.
+A Date-Ver version number takes the form YYYYMMDD, YYYYMM, or YYYY, allowing projects to choose their preferred granularity.
 
-## DateVer Specification
+## Date-Ver Specification
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119.
 
-1. A DateVer version MUST take the form YYYY, YYYYMM, or YYYYMMDD where YYYY is a four-digit year, MM is a two-digit month (01-12), and DD is a two-digit day (01-31). Each component MUST be zero-padded to its full width.
+1. A Date-Ver version MUST take the form YYYY, YYYYMM, or YYYYMMDD where YYYY is a four-digit year, MM is a two-digit month (01-12), and DD is a two-digit day (01-31). Each component MUST be zero-padded to its full width.
 
 2. Components MAY be separated by a single character separator. If a separator is used, the same separator MUST be used consistently throughout the version. Valid examples: 20251115, 2025.11.15, 2025-11-15, 2025/11/15. Invalid: 2025.11-15 (mixed separators). Versions with different separators are considered equivalent: 20251115 = 2025.11.15 = 2025-11-15.
 
@@ -28,24 +28,20 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 4. Versions MUST represent valid dates. Invalid dates like 20251301 (month 13) or 20250231 (February 31) are forbidden.
 
-5. When a project needs multiple releases within the same time period, a sequence number MAY be appended after a dot. For example: 20251115.1, 20251115.2, 202511.1, 202511.2. The sequence number MUST be a positive integer and MUST NOT contain leading zeros.
+5. Additional identifiers MAY be appended to the date using the chosen separator. This includes sequence numbers, pre-release identifiers, or build metadata. If no separator was used in the date portion, any separator MAY be chosen for additional identifiers, and that separator MUST be used consistently. Examples: 20251115.1, 20251115.alpha.1, 2025-11-15-rc-2, 2025/11/15/beta/1. Each identifier MUST comprise only ASCII alphanumerics [0-9A-Za-z] and MUST NOT be empty. Numeric identifiers MUST NOT contain leading zeros. Pre-release identifiers have lower precedence than versions without them.
 
-6. A pre-release version MAY be denoted by appending a hyphen and a series of dot-separated identifiers immediately following the date or sequence number. Examples: 20251115-alpha, 20251115-beta.1, 20251115.2-rc.3. Identifiers MUST comprise only ASCII alphanumerics and hyphens [0-9A-Za-z-]. Pre-release versions have lower precedence than the associated normal version.
-
-7. Build metadata MAY be denoted by appending a plus sign and a series of dot-separated identifiers immediately following the date, sequence number, or pre-release version. Examples: 20251115+build.123, 20251115.2+exp.sha.5114f85. Build metadata SHOULD be ignored when determining version precedence.
-
-8. Precedence is determined by comparing each component from left to right. More specific versions (with more components) have higher precedence than less specific versions within the same time period. When comparing versions with separators, strip separators first. Examples:
+6. Precedence is determined by comparing each component from left to right. More specific versions (with more components) have higher precedence than less specific versions within the same time period. When comparing versions with separators, strip separators first. Examples:
    - 2024 < 2025
    - 202510 < 202511
    - 20251114 < 20251115
    - 2025 < 202501 < 20250101
    - 20251115 < 20251115.1 < 20251115.2
-   - 20251115-alpha < 20251115-beta < 20251115
+   - 20251115.alpha < 20251115.beta < 20251115
    - 2025.11.15 = 2025-11-15 = 20251115 (equivalent after stripping separators)
 
-9. A project MAY change granularity between releases. A project using YYYY format may switch to YYYYMM or YYYYMMDD at any time. This is valid: 2024 → 202505 → 20250601.
+7. A project MAY change granularity between releases. A project using YYYY format may switch to YYYYMM or YYYYMMDD at any time. This is valid: 2024 → 202505 → 20250601.
 
-## Why Use DateVer?
+## Why Use Date-Ver?
 
 **Automatic versioning**: The version number is the release date. No decisions needed.
 
@@ -71,20 +67,20 @@ Yes! A project can use 2024, then 202505, then 20250601. More specific versions 
 
 ### What about pre-releases?
 
-Use the same format as SemVer: 20251115-alpha.1, 20251115-rc.2.
+Append identifiers using your chosen separator: 20251115.alpha.1, 2025-11-15-rc-2.
 
-### Should I use DateVer or SemVer?
+### Should I use Date-Ver or SemVer?
 
 Use SemVer if you need to communicate compatibility (libraries, APIs).
-Use DateVer if you care about release timing (applications, utilities, distributions).
+Use Date-Ver if you care about release timing (applications, utilities, distributions).
 
-### Does DateVer work with existing tools?
+### Does Date-Ver work with existing tools?
 
-Most version comparison tools sort DateVer correctly since it uses lexicographic ordering. Pre-releases and build metadata follow SemVer conventions.
+Most version comparison tools sort Date-Ver correctly since it uses lexicographic ordering.
 
 ## About
 
-DateVer specification authored by Jake Goldsborough.
+Date-Ver specification authored by Jake Goldsborough.
 
 Inspired by Semantic Versioning and Calendar Versioning.
 
